@@ -243,19 +243,19 @@
           <div class="pillar-tile pillar-tile--amber" onclick="showLibrary('everyday')">
             <div class="pillar-tile__icon">💬</div>
             <div class="pillar-tile__name">Every­day English</div>
-            <div class="pillar-tile__count" id="everydayCount">— cards</div>
+            <div class="pillar-tile__count">8 cards</div>
           </div>
           <div class="pillar-tile pillar-tile--coral" onclick="showLibrary('speaking')">
             <div class="pillar-tile__icon">🎤</div>
             <div class="pillar-tile__name">Public Speaking</div>
-            <div class="pillar-tile__count" id="speakingCount">— cards</div>
+            <div class="pillar-tile__count">9 cards</div>
           </div>
         </div>
       </div>
 
       <div class="progress-strip">
         <div class="progress-strip__label">
-          <strong id="masteredCount">0 of 16</strong> frameworks mastered
+          <strong id="masteredCount">0</strong> cards mastered
         </div>
         <div class="progress-bars" id="progressBars"></div>
       </div>
@@ -266,10 +266,20 @@
         <div class="card-list" id="homeCardList"></div>
       </div>
 
+      <div>
+        <div class="section-label">Everyday English</div>
+        <div style="height:16px"></div>
+        <div class="card-list" id="homeEverydayList"></div>
+      </div>
+
+      <div>
+        <div class="section-label">Public Speaking</div>
+        <div style="height:16px"></div>
+        <div class="card-list" id="homeSpeakingList"></div>
+      </div>
+
     </div>
   </div>
-
-  <!-- ══ LIBRARY PAGE ══ -->
   <div class="page" id="page-library">
     <div class="library-filter">
       <button class="filter-chip active" onclick="filterLibrary('all', this)">All</button>
@@ -475,8 +485,210 @@
     }
   ];
 
-  // ══════════════════════════════════════════════
-  // STATE
+  const EVERYDAY = [
+    {
+      id: 'ev_agree', pillar: 'everyday', name: 'Agreeing & Disagreeing',
+      bestFor: 'Expressing your stance diplomatically',
+      steps: [
+        { letter: '✓', word: 'Absolutely, and I\'d also add…',       tip: 'Agree and build on the point.' },
+        { letter: '✓', word: 'That\'s a fair point.',                  tip: 'Acknowledge without fully committing.' },
+        { letter: '✓', word: 'I see where you\'re coming from, but…', tip: 'Respectfully introduce a different view.' },
+        { letter: '✓', word: 'I\'m not entirely convinced that…',     tip: 'Disagree gently without shutting down.' },
+        { letter: '✓', word: 'I think we might see this differently.', tip: 'Flag a disagreement calmly.' },
+        { letter: '✓', word: 'That\'s one way to look at it…',        tip: 'Acknowledge without agreeing.' }
+      ]
+    },
+    {
+      id: 'ev_interrupt', pillar: 'everyday', name: 'Interrupting Politely',
+      bestFor: 'Joining a conversation without being rude',
+      steps: [
+        { letter: '✓', word: 'Sorry to jump in, but…',              tip: 'Classic polite interruption.' },
+        { letter: '✓', word: 'If I could just add something here…', tip: 'Signal you have a contribution.' },
+        { letter: '✓', word: 'Can I come in on that point?',        tip: 'Ask permission before interrupting.' },
+        { letter: '✓', word: 'Before we move on, I\'d like to…',    tip: 'Pause the flow gracefully.' },
+        { letter: '✓', word: 'That reminds me — can I add…?',       tip: 'Use a link to enter naturally.' },
+        { letter: '✓', word: 'I don\'t want to interrupt, but…',    tip: 'Acknowledge and interrupt anyway — politely.' }
+      ]
+    },
+    {
+      id: 'ev_clarify', pillar: 'everyday', name: 'Asking for Clarification',
+      bestFor: 'Making sure you understand correctly',
+      steps: [
+        { letter: '✓', word: 'Could you elaborate on that?',           tip: 'Ask for more detail.' },
+        { letter: '✓', word: 'What do you mean by…?',                  tip: 'Drill into a specific word or phrase.' },
+        { letter: '✓', word: 'Just to make sure I understand…',        tip: 'Restate what you heard before confirming.' },
+        { letter: '✓', word: 'Are you saying that…?',                  tip: 'Paraphrase to check understanding.' },
+        { letter: '✓', word: 'Could you give me an example of that?',  tip: 'Ask for a concrete illustration.' },
+        { letter: '✓', word: 'Sorry, I didn\'t quite catch that.',     tip: 'Ask someone to repeat without embarrassment.' }
+      ]
+    },
+    {
+      id: 'ev_opinion', pillar: 'everyday', name: 'Giving Opinions',
+      bestFor: 'Sharing views confidently and clearly',
+      steps: [
+        { letter: '✓', word: 'From my perspective…',         tip: 'Signal it\'s your view, not fact.' },
+        { letter: '✓', word: 'I tend to think that…',        tip: 'Softer way to share an opinion.' },
+        { letter: '✓', word: 'In my experience…',            tip: 'Ground your opinion in personal evidence.' },
+        { letter: '✓', word: 'If you ask me…',               tip: 'Casual, confident opener.' },
+        { letter: '✓', word: 'The way I see it…',            tip: 'Conversational and direct.' },
+        { letter: '✓', word: 'I strongly believe that…',     tip: 'Use when you want to sound decisive.' }
+      ]
+    },
+    {
+      id: 'ev_smalltalk', pillar: 'everyday', name: 'Small Talk Starters',
+      bestFor: 'Breaking the ice and building rapport',
+      steps: [
+        { letter: '✓', word: 'How\'s everything going?',              tip: 'Classic open-ended opener.' },
+        { letter: '✓', word: 'What have you been up to lately?',      tip: 'Invites them to share freely.' },
+        { letter: '✓', word: 'Did you have a good weekend?',          tip: 'Simple, friendly, easy to answer.' },
+        { letter: '✓', word: 'How are you finding things so far?',    tip: 'Great for new colleagues or events.' },
+        { letter: '✓', word: 'Have you been keeping busy?',           tip: 'Light and non-invasive.' },
+        { letter: '✓', word: 'Any exciting plans coming up?',         tip: 'Positive and forward-looking.' }
+      ]
+    },
+    {
+      id: 'ev_fillers', pillar: 'everyday', name: 'Sentence Fillers & Starters',
+      bestFor: 'Buying thinking time without losing the floor',
+      steps: [
+        { letter: '✓', word: 'That\'s a great question…',          tip: 'Buys time and flatters the asker.' },
+        { letter: '✓', word: 'What I mean is…',                    tip: 'Useful when you need to rephrase.' },
+        { letter: '✓', word: 'Let me think about that for a second.', tip: 'Honest and confident pause.' },
+        { letter: '✓', word: 'So, what I\'m trying to say is…',    tip: 'Resets your sentence mid-flow.' },
+        { letter: '✓', word: 'To put it another way…',             tip: 'Signals you\'re about to simplify.' },
+        { letter: '✓', word: 'The thing is…',                      tip: 'Casual lead-in to your main point.' }
+      ]
+    },
+    {
+      id: 'ev_enthuse', pillar: 'everyday', name: 'Showing Enthusiasm',
+      bestFor: 'Expressing genuine interest and energy',
+      steps: [
+        { letter: '✓', word: 'That\'s brilliant!',                       tip: 'Strong, warm affirmation.' },
+        { letter: '✓', word: 'I\'m really glad you brought that up.',    tip: 'Shows appreciation for the contribution.' },
+        { letter: '✓', word: 'That\'s really interesting — tell me more.', tip: 'Enthusiasm that invites elaboration.' },
+        { letter: '✓', word: 'I love that idea.',                        tip: 'Direct and energetic.' },
+        { letter: '✓', word: 'Wow, I hadn\'t thought of it that way.',   tip: 'Shows openness and admiration.' },
+        { letter: '✓', word: 'That\'s exactly the kind of thing I was hoping to hear.', tip: 'Powerful for affirmation.' }
+      ]
+    },
+    {
+      id: 'ev_silence', pillar: 'everyday', name: 'Handling Silence & Thinking',
+      bestFor: 'Staying composed when you need a moment',
+      steps: [
+        { letter: '✓', word: 'Let me think about that…',                     tip: 'Simple, confident pause.' },
+        { letter: '✓', word: 'That\'s something I\'d need to consider.',     tip: 'Buys time without sounding unsure.' },
+        { letter: '✓', word: 'Give me a moment to gather my thoughts.',      tip: 'Honest and composed.' },
+        { letter: '✓', word: 'I want to make sure I give you a proper answer.', tip: 'Frames the pause positively.' },
+        { letter: '✓', word: 'Off the top of my head…',                      tip: 'Signals a quick, honest first thought.' },
+        { letter: '✓', word: 'Can I come back to you on that?',              tip: 'Graceful deferral when you need more time.' }
+      ]
+    }
+  ];
+
+  const SPEAKING = [
+    {
+      id: 'sp_open', pillar: 'speaking', name: 'Opening Strong',
+      bestFor: 'Grabbing attention in the first 30 seconds',
+      steps: [
+        { letter: '✓', word: 'Start with a question, not an introduction', tip: 'DO: "What would you do if…?" DON\'T: "Hi, my name is… and today I will talk about…"' },
+        { letter: '✓', word: 'Use a bold, surprising statement',           tip: 'DO: Open with a shocking stat or counterintuitive claim. DON\'T: Warm up slowly with background.' },
+        { letter: '✓', word: 'Tell a one-sentence story',                  tip: 'DO: "Three years ago, I almost lost everything." DON\'T: Give context before the hook.' },
+        { letter: '✓', word: 'Pause before your first word',              tip: 'DO: Stand still, make eye contact, then speak. DON\'T: Start talking the moment you reach the front.' },
+        { letter: '✓', word: 'Signal where you\'re going',                tip: 'DO: "By the end of this, you\'ll think differently about X." DON\'T: Leave your audience guessing.' }
+      ]
+    },
+    {
+      id: 'sp_structure', pillar: 'speaking', name: 'Structuring Your Talk',
+      bestFor: 'Organising ideas so they flow naturally',
+      steps: [
+        { letter: '✓', word: 'One core idea — everything serves it',      tip: 'DO: Ask "does this point support my central idea?" DON\'T: Pack in multiple unrelated messages.' },
+        { letter: '✓', word: 'Three-part structure is your friend',        tip: 'DO: Opening / Middle / Close — audiences remember threes. DON\'T: Have more than 3 main points.' },
+        { letter: '✓', word: 'Signpost as you move between sections',     tip: 'DO: "Now that we\'ve covered X, let\'s look at Y." DON\'T: Jump between ideas without a bridge.' },
+        { letter: '✓', word: 'Build — don\'t just list',                  tip: 'DO: Each point should raise the stakes or deepen understanding. DON\'T: Present points as equal items.' },
+        { letter: '✓', word: 'Write your ending before your middle',      tip: 'DO: Know your final line before you fill in the body. DON\'T: Let your talk just trail off.' }
+      ]
+    },
+    {
+      id: 'sp_story', pillar: 'speaking', name: 'Storytelling Techniques',
+      bestFor: 'Making your talk unforgettable',
+      steps: [
+        { letter: '✓', word: 'Make yourself the student, not the hero',   tip: 'DO: Share what you learned or got wrong. DON\'T: Present yourself as already having all the answers.' },
+        { letter: '✓', word: 'Use specific details — not generalities',   tip: 'DO: "A Tuesday morning in March." DON\'T: "One day, sometime ago…"' },
+        { letter: '✓', word: 'Create a moment of tension',                tip: 'DO: Build to a problem or turning point. DON\'T: Resolve things too quickly or too smoothly.' },
+        { letter: '✓', word: 'Speak in scenes, not summaries',            tip: 'DO: Put us in the room. "She looked at me and said…" DON\'T: Narrate from a distance.' },
+        { letter: '✓', word: 'End with the lesson, not the story',        tip: 'DO: Extract the insight after the story lands. DON\'T: Let the story be the point — make the point explicit.' }
+      ]
+    },
+    {
+      id: 'sp_body', pillar: 'speaking', name: 'Body Language & Presence',
+      bestFor: 'Owning the room physically',
+      steps: [
+        { letter: '✓', word: 'Plant your feet — don\'t sway or pace',     tip: 'DO: Stand still with feet hip-width apart. DON\'T: Rock, shuffle, or wander without purpose.' },
+        { letter: '✓', word: 'Make eye contact — one person at a time',   tip: 'DO: Complete a thought while looking at one person. DON\'T: Scan the room or look over heads.' },
+        { letter: '✓', word: 'Use open gestures above the waist',         tip: 'DO: Let hands move naturally and visibly. DON\'T: Cross arms, hide hands, or fidget with objects.' },
+        { letter: '✓', word: 'Move with intention',                        tip: 'DO: Step forward to emphasise, sideways to transition. DON\'T: Pace nervously or move randomly.' },
+        { letter: '✓', word: 'Your face tells the story too',             tip: 'DO: Let your expression match your words. DON\'T: Maintain a flat, serious face throughout.' }
+      ]
+    },
+    {
+      id: 'sp_voice', pillar: 'speaking', name: 'Voice & Delivery',
+      bestFor: 'Using your voice as a powerful tool',
+      steps: [
+        { letter: '✓', word: 'Slow down at key moments',                  tip: 'DO: Drop your pace when making your most important point. DON\'T: Rush through the content you care about most.' },
+        { letter: '✓', word: 'Use the pause — it\'s not silence, it\'s power', tip: 'DO: Pause after a powerful statement and let it land. DON\'T: Fill every gap with "um", "so", or "you know".' },
+        { letter: '✓', word: 'Vary your volume intentionally',             tip: 'DO: Go quieter to pull people in, louder to energise. DON\'T: Speak at one flat volume throughout.' },
+        { letter: '✓', word: 'End sentences going DOWN, not up',          tip: 'DO: Declarative endings sound confident and certain. DON\'T: Upward inflection makes every statement sound like a question.' },
+        { letter: '✓', word: 'Breathe from your diaphragm',               tip: 'DO: Deep belly breaths support volume and calm nerves. DON\'T: Shallow chest breathing — it raises pitch and tension.' }
+      ]
+    },
+    {
+      id: 'sp_nerves', pillar: 'speaking', name: 'Handling Nerves',
+      bestFor: 'Staying calm and confident before and during a talk',
+      steps: [
+        { letter: '✓', word: 'Reframe nerves as excitement',              tip: 'DO: Tell yourself "I\'m excited" — the physiology is the same. DON\'T: Fight the feeling or try to suppress it.' },
+        { letter: '✓', word: 'Breathe before you begin',                  tip: 'DO: Take 3 slow breaths backstage or before standing up. DON\'T: Jump straight in while still feeling rushed.' },
+        { letter: '✓', word: 'Prepare your opening line by heart',        tip: 'DO: Know your first 20 words cold — confidence builds from there. DON\'T: Wing your opening, even if you improvise the rest.' },
+        { letter: '✓', word: 'Focus on giving, not performing',           tip: 'DO: Ask "what does this audience need from me?" DON\'T: Focus on how you look or what they think of you.' },
+        { letter: '✓', word: 'Nerves mean you care — use that',           tip: 'DO: Channel energy into enthusiasm and presence. DON\'T: Apologise for nerves or announce them to the audience.' }
+      ]
+    },
+    {
+      id: 'sp_close', pillar: 'speaking', name: 'Closing with Impact',
+      bestFor: 'Ending so people remember you',
+      steps: [
+        { letter: '✓', word: 'Never end with "So… yeah, that\'s it"',     tip: 'DO: Plan your final line word for word. DON\'T: Let your talk fade out or trail off awkwardly.' },
+        { letter: '✓', word: 'Call back to your opening',                  tip: 'DO: Return to the story, question or image you opened with. DON\'T: Introduce new ideas in your closing.' },
+        { letter: '✓', word: 'Give one clear call to action',              tip: 'DO: "The one thing I want you to do after this is…" DON\'T: Give three different takeaways — people act on one.' },
+        { letter: '✓', word: 'End on a high — energy up, not down',       tip: 'DO: Your final sentence should feel like a landing, not a fizzle. DON\'T: Thank the audience as your very last line.' },
+        { letter: '✓', word: 'Pause after your last word',                 tip: 'DO: Let silence signal you\'re done — it\'s powerful. DON\'T: Rush off or immediately say "Any questions?"' }
+      ]
+    },
+    {
+      id: 'sp_engage', pillar: 'speaking', name: 'Engaging Your Audience',
+      bestFor: 'Keeping people with you throughout',
+      steps: [
+        { letter: '✓', word: 'Ask rhetorical questions throughout',       tip: 'DO: "Have you ever felt like…?" keeps minds active. DON\'T: Just deliver information without pulling the audience in.' },
+        { letter: '✓', word: 'Use "you" more than "I"',                   tip: 'DO: Make it about their world, not yours. DON\'T: Lead every sentence with "I think", "I believe", "I did".' },
+        { letter: '✓', word: 'Change the stimulus every 3 minutes',      tip: 'DO: Shift between story, data, question, visual. DON\'T: Stay in one mode (lecture, lecture, lecture).' },
+        { letter: '✓', word: 'Acknowledge what they might be thinking',   tip: 'DO: "You might be wondering…" shows you understand them. DON\'T: Ignore the invisible objections in the room.' },
+        { letter: '✓', word: 'Make them feel something',                  tip: 'DO: Aim for one emotional moment per talk. DON\'T: Stay entirely in the rational, informational lane.' }
+      ]
+    },
+    {
+      id: 'sp_habits', pillar: 'speaking', name: '9 Habits of Expert Communicators',
+      bestFor: 'The daily habits that separate great speakers from good ones',
+      steps: [
+        { letter: 'D', word: 'Pause — Delivery Habit 1',         tip: 'DO: Use silence deliberately after every key point. DON\'T: Fill pauses with filler words. The pause IS the punctuation.' },
+        { letter: 'D', word: 'Slow Down to Highlight — Delivery Habit 2', tip: 'DO: Reduce your pace to signal importance. DON\'T: Rush through your best material. Speed buries meaning.' },
+        { letter: 'D', word: 'Declarative Sentences — Delivery Habit 3', tip: 'DO: End statements going DOWN in pitch — it sounds certain. DON\'T: Use upward inflection — it sounds like you\'re asking permission.' },
+        { letter: 'V', word: 'Warm Up Your Voice — Vocal Habit 1',      tip: 'DO: Hum, sing, or do lip trills before speaking. DON\'T: start cold — your voice needs warming like a muscle.' },
+        { letter: 'V', word: 'Default Nose Breathing — Vocal Habit 2',  tip: 'DO: Breathe in through your nose — it\'s slower, calmer, deeper. DON\'T: Mouth breathe — it dries your throat and raises anxiety.' },
+        { letter: 'V', word: 'Use More Volume — Vocal Habit 3',          tip: 'DO: Speak slightly louder than feels comfortable — rooms absorb sound. DON\'T: Assume your indoor voice carries. It rarely does.' },
+        { letter: 'C', word: 'One Idea at a Time — Cognitive Habit 1',  tip: 'DO: Complete one thought fully before introducing the next. DON\'T: Layer ideas on top of each other — audiences can only hold one at a time.' },
+        { letter: 'C', word: 'Use a Framework — Cognitive Habit 2',     tip: 'DO: Structure every response with PREP, CCC or similar. DON\'T: Speak in a stream of consciousness — structure is a kindness to your listener.' },
+        { letter: 'C', word: 'Use Analogies — Cognitive Habit 3',       tip: 'DO: "It\'s like a GPS — it recalculates when you go off route." DON\'T: Explain complex ideas with more complex ideas. Simplify with comparison.' }
+      ]
+    }
+  ];
   // ══════════════════════════════════════════════
   let currentStudyId   = null;
   let currentPracticeQueue = [];
@@ -522,7 +734,7 @@
     document.getElementById('page-' + name).classList.add('active');
     document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
     if (navBtn) navBtn.classList.add('active');
-    if (name === 'practice') renderPractice(FRAMEWORKS);
+    if (name === 'practice') renderPractice([...FRAMEWORKS, ...EVERYDAY, ...SPEAKING]);
     if (name === 'library')  renderLibrary(currentFilter);
     if (name === 'home')     renderHome();
   }
@@ -530,16 +742,22 @@
   function showStudy(id, fromPage) {
     previousPage = fromPage || 'home';
     currentStudyId = id;
-    const f = FRAMEWORKS.find(x => x.id === id);
+    const f = [...FRAMEWORKS, ...EVERYDAY, ...SPEAKING].find(x => x.id === id);
     if (!f) return;
+    const pillarLabel = { frameworks: '🧩 Framework', everyday: '💬 Everyday English', speaking: '🎤 Public Speaking' };
+    const pillarColor = { frameworks: 'var(--teal)', everyday: 'var(--amber)', speaking: 'var(--coral)' };
+    const stepBg = { frameworks: 'var(--teal-light)', everyday: 'var(--amber-light)', speaking: 'var(--coral-light)' };
+    const stepColor = { frameworks: 'var(--teal)', everyday: 'var(--amber)', speaking: 'var(--coral)' };
+    document.getElementById('studyEyebrow').textContent = pillarLabel[f.pillar] || '🧩 Framework';
+    document.getElementById('studyEyebrow').style.color = pillarColor[f.pillar] || 'var(--teal)';
     document.getElementById('studyName').textContent = f.name;
     document.getElementById('studyDesc').textContent = f.bestFor;
     const body = document.getElementById('studyBody');
     body.innerHTML = f.steps.map((s, i) => `
       <div class="study-step">
-        <div class="study-step__number">${i + 1}</div>
+        <div class="study-step__number" style="background:${stepBg[f.pillar]};color:${stepColor[f.pillar]}">${i + 1}</div>
         <div>
-          <div class="study-step__letter">${s.letter}</div>
+          <div class="study-step__letter" style="color:${stepColor[f.pillar]}">${s.letter === '✓' ? '' : s.letter}</div>
           <div class="study-step__meaning">${s.word}</div>
           <div class="study-step__tip">${s.tip}</div>
         </div>
@@ -563,15 +781,13 @@
   // HOME
   // ══════════════════════════════════════════════
   function renderHome() {
-    // Greeting
     const h = new Date().getHours();
     document.getElementById('greeting').textContent =
       h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
-
-    // Streak
     document.getElementById('streakLabel').textContent = 'Day ' + getStreak();
 
-    // Daily focus — pick a framework not yet mastered, rotating by day
+    // Daily focus — pick unmastered framework first
+    const ALL = [...FRAMEWORKS, ...EVERYDAY, ...SPEAKING];
     const unmastered = FRAMEWORKS.filter(f => getStatus(f.id) !== 'mastered');
     const pool = unmastered.length > 0 ? unmastered : FRAMEWORKS;
     const daily = pool[Math.floor(Date.now() / 86400000) % pool.length];
@@ -581,24 +797,26 @@
       daily.steps.map(s => `<span class="step-pill">${s.word}</span>`).join('');
     document.getElementById('dailyCard').dataset.id = daily.id;
 
-    // Progress
-    const mastered = FRAMEWORKS.filter(f => getStatus(f.id) === 'mastered').length;
-    document.getElementById('masteredCount').textContent = `${mastered} of ${FRAMEWORKS.length}`;
+    // Progress — all cards combined
+    const mastered = ALL.filter(f => getStatus(f.id) === 'mastered').length;
+    document.getElementById('masteredCount').textContent = `${mastered} of ${ALL.length}`;
     const bars = document.getElementById('progressBars');
-    bars.innerHTML = FRAMEWORKS.map(f => {
+    bars.innerHTML = ALL.map(f => {
       const s = getStatus(f.id);
       const color = s === 'mastered' ? 'var(--teal)' : s === 'review' ? 'var(--amber)' : 'var(--surface-alt)';
       const height = s === 'mastered' ? '28px' : s === 'review' ? '18px' : '10px';
       return `<div class="progress-bar" style="background:${color};height:${height}"></div>`;
     }).join('');
 
-    // Card list
+    // Card lists
     renderCardList(document.getElementById('homeCardList'), FRAMEWORKS, 'home');
+    renderCardList(document.getElementById('homeEverydayList'), EVERYDAY, 'home');
+    renderCardList(document.getElementById('homeSpeakingList'), SPEAKING, 'home');
   }
 
   function startPracticeFromDaily() {
     showPage('practice', document.querySelectorAll('.nav-item')[2]);
-    renderPractice(FRAMEWORKS);
+    renderPractice([...FRAMEWORKS, ...EVERYDAY, ...SPEAKING]);
   }
   function studyFromDaily() {
     const id = document.getElementById('dailyCard').dataset.id;
@@ -619,10 +837,12 @@
   }
 
   function renderCardList(el, items, fromPage) {
+    const pillarClass = { frameworks: 'teal', everyday: 'amber', speaking: 'coral' };
     el.innerHTML = items.map(f => {
+      const cls = pillarClass[f.pillar] || 'teal';
       const status = getStatus(f.id);
       return `
-        <div class="framework-card framework-card--teal" onclick="showStudy('${f.id}','${fromPage}')">
+        <div class="framework-card framework-card--${cls}" onclick="showStudy('${f.id}','${fromPage}')">
           <div class="framework-card__body">
             <div class="framework-card__name">${f.name}</div>
             <div class="framework-card__desc">${f.bestFor}</div>
@@ -643,12 +863,12 @@
   }
 
   function renderLibrary(filter) {
-    const items = filter === 'all' || filter === 'frameworks' ? FRAMEWORKS : [];
     const el = document.getElementById('libraryCardList');
-    if (items.length === 0) {
-      el.innerHTML = `<div class="empty-state"><div class="empty-state__emoji">🚧</div>Coming soon — Everyday English & Public Speaking cards are being added next.</div>`;
-      return;
-    }
+    let items = [];
+    if (filter === 'all')        items = [...FRAMEWORKS, ...EVERYDAY, ...SPEAKING];
+    else if (filter === 'frameworks') items = FRAMEWORKS;
+    else if (filter === 'everyday')   items = EVERYDAY;
+    else if (filter === 'speaking')   items = SPEAKING;
     renderCardList(el, items, 'library');
   }
 
@@ -671,24 +891,31 @@
     const f = currentPracticeQueue[currentCardIndex];
     const total = currentPracticeQueue.length;
     const pct = Math.round((currentCardIndex / total) * 100);
+    const pillarColor = { frameworks: 'var(--teal)', everyday: 'var(--amber)', speaking: 'var(--coral)' };
+    const pillarLabel = { frameworks: '🧩 Framework', everyday: '💬 Everyday English', speaking: '🎤 Public Speaking' };
+    const revealBg = { frameworks: 'var(--teal-light)', everyday: 'var(--amber-light)', speaking: 'var(--coral-light)' };
+    const revealColor = { frameworks: 'var(--teal)', everyday: 'var(--amber)', speaking: 'var(--coral)' };
+    const pColor = pillarColor[f.pillar] || 'var(--teal)';
+    const rBg    = revealBg[f.pillar]   || 'var(--teal-light)';
+    const rColor = revealColor[f.pillar] || 'var(--teal)';
 
     wrap.innerHTML = `
-      <div class="flashcard-progress-bar"><div class="flashcard-progress-fill" style="width:${pct}%"></div></div>
+      <div class="flashcard-progress-bar"><div class="flashcard-progress-fill" style="width:${pct}%;background:${pColor}"></div></div>
       <div class="flashcard-counter">${currentCardIndex + 1} of ${total}</div>
 
       <div class="flashcard" id="fc" onclick="revealCard()">
-        <div class="flashcard__glow" style="background:var(--teal)"></div>
-        <div class="flashcard__hint">🧩 Framework</div>
+        <div class="flashcard__glow" style="background:${pColor}"></div>
+        <div class="flashcard__hint" style="color:${pColor}">${pillarLabel[f.pillar] || '🧩 Framework'}</div>
         <div class="flashcard__name">${f.name}</div>
         <div class="flashcard__desc">${f.bestFor}</div>
         <div class="flashcard-steps-reveal" id="fcSteps">
           ${f.steps.map(s => `
-            <div class="reveal-step">
-              <div class="reveal-step__letter">${s.letter}</div>
-              <div class="reveal-step__text">${s.word} — ${s.tip}</div>
+            <div class="reveal-step" style="background:${rBg}">
+              <div class="reveal-step__letter" style="color:${rColor}">${s.letter === '✓' ? '→' : s.letter}</div>
+              <div class="reveal-step__text">${s.word}</div>
             </div>`).join('')}
         </div>
-        <div class="flashcard__tap">Tap to reveal steps</div>
+        <div class="flashcard__tap">Tap to reveal</div>
       </div>
 
       <div class="flashcard-verdict" id="fcVerdict">
@@ -725,7 +952,7 @@
         <div class="flashcard-done__emoji">🎉</div>
         <div class="flashcard-done__title">Session complete!</div>
         <div class="flashcard-done__sub">You reviewed ${currentPracticeQueue.length} cards.<br>${mastered} marked as mastered.</div>
-        <button class="btn btn--dark" style="margin-top:8px" onclick="renderPractice(FRAMEWORKS)">Practice all again</button>
+        <button class="btn btn--dark" style="margin-top:8px" onclick="renderPractice([...FRAMEWORKS,...EVERYDAY,...SPEAKING])">Practice all again</button>
       </div>
     `;
     renderHome(); // refresh progress on home
